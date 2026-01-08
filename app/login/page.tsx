@@ -13,7 +13,7 @@ export default function LoginPage({ searchParams }: { searchParams?: { next?: st
           <h2 style={{marginTop:0}}>Вход в курс</h2>
           <p className="small">Введите пароль доступа (приходит после оплаты).</p>
 
-          <form action={login} className="grid" style={{marginTop:12}}>
+          <form action={login as any} className="grid" style={{marginTop:12}}>
             <input type="hidden" name="next" value={next} />
             <input className="input" name="password" placeholder="Пароль" />
             <button className="btn btnPrimary" type="submit">Войти</button>
