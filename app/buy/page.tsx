@@ -9,21 +9,30 @@ export default function BuyPage() {
 
       <div className="container">
         <div className="card" style={{ maxWidth: 640, margin: "0 auto" }}>
-          <h1 style={{ marginBottom: 12 }}>Оплата доступа к курсу</h1>
+          <h1 style={{ marginBottom: 8 }}>Курс «Фото и видео с нуля»</h1>
 
-          <p className="small" style={{ marginBottom: 16 }}>
-            Оплата проходит через <b>Kaspi Pay</b>.  
-            После оплаты ты получишь доступ к курсу вручную.
-          </p>
+          <div className="small" style={{ marginBottom: 16 }}>
+            Полный старт для тех, кто хочет снимать красиво и уверенно
+          </div>
+
+          <div
+            style={{
+              fontSize: 24,
+              fontWeight: 600,
+              marginBottom: 16,
+            }}
+          >
+            Стоимость: 25 000 ₸
+          </div>
 
           <hr className="sep" />
 
-          <h3 style={{ marginTop: 16 }}>Как оплатить:</h3>
+          <h3 style={{ marginTop: 16 }}>Как проходит оплата</h3>
           <ol className="list">
             <li>Нажми кнопку «Оплатить через Kaspi»</li>
             <li>Оплати удобным способом в Kaspi</li>
             <li>Отправь чек в WhatsApp / Telegram / Instagram</li>
-            <li>Получи доступ к курсу</li>
+            <li>Я выдам тебе доступ к курсу</li>
           </ol>
 
           <a
@@ -31,19 +40,24 @@ export default function BuyPage() {
             target="_blank"
             rel="noopener noreferrer"
             className="btn btnPrimary"
-            style={{ display: "block", textAlign: "center", marginTop: 20 }}
+            style={{
+              display: "block",
+              textAlign: "center",
+              marginTop: 20,
+              fontSize: 18,
+            }}
           >
-            Оплатить через Kaspi
+            Оплатить 25 000 ₸ через Kaspi
           </a>
 
           <div className="notice" style={{ marginTop: 16 }}>
-            <b>Важно:</b> после оплаты обязательно пришли чек,  
-            чтобы я могла выдать доступ.
+            <b>Важно:</b> после оплаты обязательно пришли чек,
+            чтобы я могла подтвердить платёж и открыть доступ.
           </div>
 
           <div style={{ marginTop: 20 }}>
             <Link href="/course" className="btn btnGhost">
-              ← Назад к курсу
+              ← Назад к описанию курса
             </Link>
           </div>
         </div>
