@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
-import { lessons } from "@/lib/course";
+import { Nav } from "../../../components/Nav";
+import { Footer } from "../../../components/Footer";
+import { lessons } from "../../../lib/course";
 
 export default function LessonPage({ params }: { params: { slug: string } }) {
   const lesson = lessons.find((l) => l.slug === params.slug);
