@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { isPasswordValid } from "@/lib/auth";
+import { isPasswordValid } from "../../lib/auth";
 
 export async function login(formData: FormData) {
   const password = String(formData.get("password") || "");
