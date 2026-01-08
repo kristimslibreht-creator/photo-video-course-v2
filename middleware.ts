@@ -1,16 +1,24 @@
+// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { COOKIE_ADMIN, COOKIE_COURSE } from "@/lib/auth";
 
 export function middleware(req: NextRequest) {
-  const isAuthed = req.cookies.get("course_auth")?.value === "1";
-  const isCourse = req.nextUrl.pathname.startsWith("/course");
+  const { pathname } = req.nextUrl;
 
-  if (isCourse && !isAuthed) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("next", req.nextUrl.pathname);
-    return NextResponse.redirect(url);
+  // защищаем только раздел курса
+  if (pathname.startsWith("/course")) {
+    const hasCourse = req.cookies.get(COOKIE_COURSE)?.value === "1";
+    const hasAdmin = req.cookies.get(COOKIE_ADMIN)?.value === "1";
+
+    if (!hasCourse && !hasAdmin) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("next", pathname);
+      return NextResponse.redirect(url);
+    }
   }
+
   return NextResponse.next();
 }
 
