@@ -1,5 +1,5 @@
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
+import { Nav } from "../../components/Nav";
+import { Footer } from "../../components/Footer";
 import { login } from "./actions";
 
 export default function LoginPage({ searchParams }: { searchParams?: { next?: string } }) {
