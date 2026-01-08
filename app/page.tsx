@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Nav } from "../../../components/Nav";
-import { Footer } from "../../../components/Footer";
-import { COURSE_TITLE, lessons } from "../../../lib/course";
+import { Nav } from "../components/Nav";
+import { Footer } from "../components/Footer";
+import { COURSE_TITLE, lessons } from "../lib/course";
 
 export default function HomePage() {
   return (
