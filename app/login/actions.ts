@@ -1,43 +1,34 @@
-// app/login/actions.ts
 "use server";
 
-import { setAdminAccess, setCourseAccess, clearAccess } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { setAdminAccess, setCourseAccess } from "@/lib/auth";
 
-export type LoginResult =
-  | { ok: true; role: "admin" | "student" }
-  | { ok: false; message: string };
+type State = { error?: string };
 
 function normalize(s: string) {
   return (s || "").trim();
 }
 
-export async function login(formData: FormData): Promise<LoginResult> {
+export async function login(prevState: State, formData: FormData): Promise<State> {
   const password = normalize(String(formData.get("password") || ""));
+  const next = normalize(String(formData.get("next") || "/course"));
 
   const coursePass = normalize(process.env.COURSE_PASSWORD || "");
   const adminPass = normalize(process.env.ADMIN_PASSWORD || "");
 
-  // если переменные не настроены — покажем понятную ошибку
   if (!coursePass && !adminPass) {
-    return { ok: false, message: "Пароль не настроен на сервере (Vercel env)." };
+    return { error: "Пароли не настроены на Vercel (Environment Variables)." };
   }
 
-  // админ
   if (adminPass && password === adminPass) {
     setAdminAccess();
-    return { ok: true, role: "admin" };
+    redirect(next);
   }
 
-  // ученик
   if (coursePass && password === coursePass) {
     setCourseAccess();
-    return { ok: true, role: "student" };
+    redirect(next);
   }
 
-  return { ok: false, message: "Неверный пароль. Проверь раскладку/пробелы." };
-}
-
-export async function logout() {
-  clearAccess();
-  return { ok: true as const };
+  return { error: "Неверный пароль. Проверь язык/пробелы." };
 }
