@@ -1,46 +1,62 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Nav } from "../../components/Nav";
 import { Footer } from "../../components/Footer";
-import { lessons, COURSE_TITLE } from "../../lib/course";
+import { lessons } from "../../lib/course";
 
-export default function CoursePage() {
+export default function LessonPage({ params }: { params: { slug: string } }) {
+  const lesson = lessons.find((l) => l.slug === params.slug);
+  if (!lesson) return notFound();
+
   return (
     <>
       <Nav />
+
       <div className="container">
-        <div className="card">
-          <h1 style={{ margin: "0 0 6px" }}>{COURSE_TITLE}</h1>
-          <div className="small">Выбери урок и проходи по шагам.</div>
-        </div>
-
-        <div className="grid2" style={{ marginTop: 12 }}>
-          {lessons.map((l) => (
-            <div key={l.slug} className="card">
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
-                <h3 style={{ margin: 0 }}>{l.title}</h3>
-                <div className="small">{l.duration}</div>
-              </div>
-
-              <div className="small" style={{ marginTop: 8 }}>
-                {l.summary}
-              </div>
-
-              <div style={{ marginTop: 12 }}>
-                <Link className="btn btnPrimary" href={`/course/${l.slug}`}>
-                  Открыть урок →
-                </Link>
-              </div>
+        <div className="grid2">
+          <div className="card">
+            <div className="small">
+              <Link href="/course">← назад к урокам</Link>
             </div>
-          ))}
-        </div>
 
-        <div className="card" style={{ marginTop: 12 }}>
-          <div className="small">
-            Если у тебя нет доступа — перейди на страницу <Link href="/buy">«Купить»</Link>.
-            Если доступ есть — <Link href="/login?next=%2Fcourse">введи пароль</Link>.
+            <h2 style={{ margin: "10px 0 6px" }}>{lesson.title}</h2>
+            <div className="small">Длительность: {lesson.duration}</div>
+
+            <hr className="sep" />
+
+            {/* Вариант 2: текстовый урок */}
+            <div className="section">
+              {lesson.content?.map((p, i) => (
+                <p key={i} className="small" style={{ lineHeight: 1.6 }}>
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            {!!lesson.homework?.length && (
+              <>
+                <hr className="sep" />
+                <h3 className="sectionTitle">Домашнее задание</h3>
+                <ol className="list">
+                  {lesson.homework.map((t, i) => (
+                    <li key={i} style={{ marginBottom: 8 }}>
+                      {t}
+                    </li>
+                  ))}
+                </ol>
+              </>
+            )}
+          </div>
+
+          <div className="card">
+            <h3 className="sectionTitle">Подсказка</h3>
+            <div className="small">
+              После урока сделай задания и сохрани результат. Позже добавим удобную отправку ДЗ.
+            </div>
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );
