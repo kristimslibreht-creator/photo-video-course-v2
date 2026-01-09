@@ -1,34 +1,46 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { setAdminAccess, setCourseAccess } from "@/lib/auth";
 
-type State = { error?: string };
-
-function normalize(s: string) {
-  return (s || "").trim();
+function clean(s: string) {
+  return (s ?? "").trim();
 }
 
-export async function login(prevState: State, formData: FormData): Promise<State> {
-  const password = normalize(String(formData.get("password") || ""));
-  const next = normalize(String(formData.get("next") || "/course"));
+export async function login(formData: FormData) {
+  const password = clean(String(formData.get("password") ?? ""));
+  const next = clean(String(formData.get("next") ?? "/course"));
 
-  const coursePass = normalize(process.env.COURSE_PASSWORD || "");
-  const adminPass = normalize(process.env.ADMIN_PASSWORD || "");
+  const coursePass = clean(process.env.COURSE_PASSWORD ?? "");
+  const adminPass = clean(process.env.ADMIN_PASSWORD ?? "");
 
-  if (!coursePass && !adminPass) {
-    return { error: "Пароли не настроены на Vercel (Environment Variables)." };
+  const ok =
+    (coursePass && password === coursePass) ||
+    (adminPass && password === adminPass);
+
+  if (!ok) {
+    // показываем ошибку через query
+    redirect(`/login?next=${encodeURIComponent(next)}&error=1`);
   }
 
-  if (adminPass && password === adminPass) {
-    setAdminAccess();
-    redirect(next);
-  }
+  cookies().set("course_access", "1", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: true,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30, // 30 дней
+  });
 
-  if (coursePass && password === coursePass) {
-    setCourseAccess();
-    redirect(next);
-  }
+  redirect(next || "/course");
+}
 
-  return { error: "Неверный пароль. Проверь язык/пробелы." };
+export async function logout() {
+  cookies().set("course_access", "0", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: true,
+    path: "/",
+    maxAge: 0,
+  });
+  redirect("/");
 }
