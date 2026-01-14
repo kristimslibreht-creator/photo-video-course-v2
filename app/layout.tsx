@@ -1,17 +1,14 @@
 import "./globals.css";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Курс: Фото и видео с нуля",
-  description: "Закрытый видео-курс для начинающих. Лендинг + покупка + доступ по паролю.",
+export const metadata = {
+  title: "Kristina Course",
+  description: "Курс фото и видео с нуля",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru">
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
