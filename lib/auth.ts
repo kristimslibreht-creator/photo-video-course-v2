@@ -1,30 +1,28 @@
-// lib/auth.ts
 import { cookies } from "next/headers";
 
-export const COOKIE_COURSE = "course_access";
-export const COOKIE_ADMIN = "admin_access";
+export const ACCESS_COOKIE = "pv_access";
+export const ROLE_COOKIE = "pv_role";
 
-export function setCourseAccess() {
-  cookies().set(COOKIE_COURSE, "1", {
+export function setAccessCookie(role: "student" | "admin") {
+  const c = cookies();
+  c.set(ACCESS_COOKIE, "1", {
     httpOnly: true,
     sameSite: "lax",
-    secure: true,
     path: "/",
-    maxAge: 60 * 60 * 24 * 365, // 1 год
+    secure: true,
+    maxAge: 60 * 60 * 24 * 30, // 30 дней
+  });
+  c.set(ROLE_COOKIE, role, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    secure: true,
+    maxAge: 60 * 60 * 24 * 30,
   });
 }
 
-export function setAdminAccess() {
-  cookies().set(COOKIE_ADMIN, "1", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: true,
-    path: "/",
-    maxAge: 60 * 60 * 24 * 365,
-  });
-}
-
-export function clearAccess() {
-  cookies().set(COOKIE_COURSE, "", { path: "/", maxAge: 0 });
-  cookies().set(COOKIE_ADMIN, "", { path: "/", maxAge: 0 });
+export function clearAccessCookie() {
+  const c = cookies();
+  c.set(ACCESS_COOKIE, "", { path: "/", maxAge: 0 });
+  c.set(ROLE_COOKIE, "", { path: "/", maxAge: 0 });
 }
