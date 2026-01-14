@@ -1,26 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { ACCESS_COOKIE } from "./lib/auth";
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // защищаем только курс
-  if (!pathname.startsWith("/course")) {
-    return NextResponse.next();
-  }
+  const isCourse = pathname === "/course" || pathname.startsWith("/course/");
+  if (!isCourse) return NextResponse.next();
 
-  const access = req.cookies.get("course_access")?.value;
+  const hasAccess = req.cookies.get(ACCESS_COOKIE)?.value === "1";
+  if (hasAccess) return NextResponse.next();
 
-  // ✅ админ и пользователь проходят
-  if (access === "admin" || access === "user") {
-    return NextResponse.next();
-  }
-
-  // ❌ остальные — на логин
-  const url = req.nextUrl.clone();
-  url.pathname = "/login";
-  url.searchParams.set("next", pathname);
-  return NextResponse.redirect(url);
+  const loginUrl = new URL("/login", req.url);
+  loginUrl.searchParams.set("next", pathname);
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {
