@@ -1,63 +1,40 @@
 import Link from "next/link";
+import { lessons } from "@/lib/course";
 import { notFound } from "next/navigation";
-import { Nav } from "../../components/Nav";
-import { Footer } from "../../components/Footer";
-import { lessons } from "../../lib/course";
 
 export default function LessonPage({ params }: { params: { slug: string } }) {
   const lesson = lessons.find((l) => l.slug === params.slug);
   if (!lesson) return notFound();
 
   return (
-    <>
-      <Nav />
+    <main style={{ padding: 24, maxWidth: 900, margin: "0 auto" }}>
+      <h1 style={{ fontSize: 26, marginBottom: 6 }}>{lesson.title}</h1>
+      <div style={{ opacity: 0.8, marginBottom: 16 }}>{lesson.duration}</div>
 
-      <div className="container">
-        <div className="grid2">
-          <div className="card">
-            <div className="small">
-              <Link href="/course">← назад к урокам</Link>
-            </div>
-
-            <h2 style={{ margin: "10px 0 6px" }}>{lesson.title}</h2>
-            <div className="small">Длительность: {lesson.duration}</div>
-
-            <hr className="sep" />
-
-            {/* Вариант 2: текстовый урок */}
-            <div className="section">
-              {lesson.content?.map((p, i) => (
-                <p key={i} className="small" style={{ lineHeight: 1.6 }}>
-                  {p}
-                </p>
-              ))}
-            </div>
-
-            {!!lesson.homework?.length && (
-              <>
-                <hr className="sep" />
-                <h3 className="sectionTitle">Домашнее задание</h3>
-                <ol className="list">
-                  {lesson.homework.map((t, i) => (
-                    <li key={i} style={{ marginBottom: 8 }}>
-                      {t}
-                    </li>
-                  ))}
-                </ol>
-              </>
-            )}
-          </div>
-
-          <div className="card">
-            <h3 className="sectionTitle">Подсказка</h3>
-            <div className="small">
-              После урока сделай задания и сохрани результат. Позже добавим удобную отправку ДЗ.
-            </div>
-          </div>
-        </div>
+      <div style={card}>
+        <pre style={{ whiteSpace: "pre-wrap", margin: 0, fontFamily: "inherit", lineHeight: 1.5 }}>
+          {lesson.content}
+        </pre>
       </div>
 
-      <Footer />
-    </>
+      <div style={{ marginTop: 18, display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <Link href="/course" style={btn}>← К списку уроков</Link>
+        <Link href="/" style={btn}>На главную</Link>
+      </div>
+    </main>
   );
 }
+
+const card: React.CSSProperties = {
+  padding: 14,
+  borderRadius: 12,
+  border: "1px solid rgba(255,255,255,0.15)",
+};
+
+const btn: React.CSSProperties = {
+  display: "inline-block",
+  padding: "10px 14px",
+  borderRadius: 12,
+  border: "1px solid rgba(255,255,255,0.2)",
+  textDecoration: "none",
+};
