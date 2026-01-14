@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Nav } from "../../components/Nav";
 import { Footer } from "../../components/Footer";
 
-const PRICE = "25 000 ₸";
+const PRICE = "15 000 ₸";
 const KASPI_PAY_URL = "https://pay.kaspi.kz/pay/xntcgaoj";
 
 export default function BuyPage() {
