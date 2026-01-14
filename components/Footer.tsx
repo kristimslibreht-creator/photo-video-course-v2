@@ -1,10 +1,7 @@
-export function Footer() {
+export default function Footer() {
   return (
-    <div className="container">
-      <div className="footer">
-        <div className="badge">⚡️ MVP-сайт курса • можно расширять до личных кабинетов и автодоступа</div>
-        <div style={{marginTop:10}}>© {new Date().getFullYear()} Kristina</div>
-      </div>
+    <div style={{ padding: 24, opacity: 0.7, fontSize: 12 }}>
+      © {new Date().getFullYear()} Kristina Course
     </div>
   );
 }
